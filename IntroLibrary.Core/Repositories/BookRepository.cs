@@ -12,6 +12,7 @@ namespace IntroLibrary.Core.Repositories
         IEnumerable<Book> GetBookByTitle(string title);
         IEnumerable<Book> GetBookByAuthor(string author);
         Book AddBook(Book book);
+        Book UpdateBook(Book book);
     }
 
     public class BookRepository : IBookRepository
@@ -74,6 +75,22 @@ namespace IntroLibrary.Core.Repositories
 
             book.ID = newId;
             _books.Add(book);
+            return book;
+        }
+
+        public Book UpdateBook(Book newBook)
+        {
+            var book = GetBook(newBook.ID);
+
+            foreach (var propertyInfo in newBook.GetType().GetProperties())
+            {
+                var propertyValue = propertyInfo.GetValue(newBook, null);
+                if (propertyValue == null || (propertyInfo.PropertyType == typeof(DateTime) && (DateTime)propertyValue == DateTime.MinValue))
+                    continue;
+
+                propertyInfo.SetValue(book, propertyValue);
+            }
+
             return book;
         }
     }

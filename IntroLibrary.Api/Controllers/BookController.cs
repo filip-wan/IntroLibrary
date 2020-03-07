@@ -40,10 +40,16 @@ namespace IntroLibrary.Api.Controllers
             return result == null ? (IActionResult) BadRequest() : Ok(result);
         }
 
-        [HttpPut]
-        public IActionResult Put()
+        [HttpPut("{id:int}")]
+        public IActionResult Put([FromRoute] int id, [FromBody] BookDto book)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result =_service.UpdateBook(id, book);
+            return result == null ? (IActionResult)BadRequest() : Ok(result);
         }
 
         [HttpDelete]
