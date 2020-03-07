@@ -15,6 +15,7 @@ namespace IntroLibrary.Core.Services
         IEnumerable<BookDto> GetBook(string search);
         BookDto AddBook(BookDto bookDto);
         BookDto UpdateBook(int id, BookDto bookDto);
+        BookDto DeleteBook(int id);
     }
 
     public class BookService : IBookService
@@ -74,6 +75,12 @@ namespace IntroLibrary.Core.Services
             updatedBook = _bookRepository.UpdateBook(updatedBook);
 
             return updatedBook == null ? null : _mapper.Map<BookDto>(updatedBook);
+        }
+
+        public BookDto DeleteBook(int id)
+        {
+            var book = _bookRepository.DeleteBook(id);
+            return book == null ? null : _mapper.Map<BookDto>(book);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace IntroLibrary.Core.Repositories
         IEnumerable<Book> GetBookByAuthor(string author);
         Book AddBook(Book book);
         Book UpdateBook(Book book);
+        Book DeleteBook(int id);
     }
 
     public class BookRepository : IBookRepository
@@ -92,6 +93,12 @@ namespace IntroLibrary.Core.Repositories
             }
 
             return book;
+        }
+
+        public Book DeleteBook(int id)
+        {
+            var book = GetBook(id);
+            return _books.Remove(book) ? book : null;
         }
     }
 }

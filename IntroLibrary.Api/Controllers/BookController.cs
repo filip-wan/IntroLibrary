@@ -52,10 +52,11 @@ namespace IntroLibrary.Api.Controllers
             return result == null ? (IActionResult)BadRequest() : Ok(result);
         }
 
-        [HttpDelete]
-        public IActionResult Delete()
+        [HttpDelete("{id:int}")]
+        public IActionResult Delete([FromRoute] int id)
         {
-            throw new NotImplementedException();
+            var result = _service.DeleteBook(id);
+            return result == null ? (IActionResult)NotFound() : Ok(result);
         }
     }
 }
