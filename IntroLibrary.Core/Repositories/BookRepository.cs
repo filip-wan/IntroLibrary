@@ -11,6 +11,7 @@ namespace IntroLibrary.Core.Repositories
         Book GetBook(int id);
         IEnumerable<Book> GetBookByTitle(string title);
         IEnumerable<Book> GetBookByAuthor(string author);
+        Book AddBook(Book book);
     }
 
     public class BookRepository : IBookRepository
@@ -42,7 +43,7 @@ namespace IntroLibrary.Core.Repositories
                     ReleaseDate = new DateTime(1993, 11, 01)
                 }
             );
-            
+
         }
 
         public IEnumerable<Book> GetBooks()
@@ -64,6 +65,16 @@ namespace IntroLibrary.Core.Repositories
         public IEnumerable<Book> GetBookByAuthor(string author)
         {
             return _books.FindAll(b => b.Author.Contains(author));
+        }
+
+        public Book AddBook(Book book)
+        {
+
+            var newId = _books.Count > 0 ? _books.Max(b => b.ID) + 1 : 0;
+
+            book.ID = newId;
+            _books.Add(book);
+            return book;
         }
     }
 }

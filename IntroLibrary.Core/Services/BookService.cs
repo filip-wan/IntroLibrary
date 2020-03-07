@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using IntroLibrary.Core.DTOs;
 using IntroLibrary.Core.Models;
 using IntroLibrary.Core.Repositories;
+using ValidationContext = System.ComponentModel.DataAnnotations.ValidationContext;
 
 namespace IntroLibrary.Core.Services
 {
@@ -11,6 +13,7 @@ namespace IntroLibrary.Core.Services
         IEnumerable<BookDto> GetAllBooks();
         BookDto GetBook(int id);
         IEnumerable<BookDto> GetBook(string search);
+        BookDto AddBook(BookDto bookDto);
     }
 
     public class BookService : IBookService
@@ -22,7 +25,11 @@ namespace IntroLibrary.Core.Services
         {
             _bookRepository = bookRepository;
 
-            var configuration = new MapperConfiguration(cfg => cfg.CreateMap<Book, BookDto>());
+            var configuration = new MapperConfiguration(cfg => 
+            {
+                cfg.CreateMap<Book, BookDto>();
+                cfg.CreateMap<BookDto, Book>();
+            });
             _mapper = new Mapper(configuration);
         }
 
@@ -42,6 +49,17 @@ namespace IntroLibrary.Core.Services
             result.UnionWith( _bookRepository.GetBookByAuthor(search));
             result.UnionWith(_bookRepository.GetBookByTitle(search));
             return result.Count > 0 ? _mapper.Map<IEnumerable<BookDto>>(result) : null;
+        }
+
+        public BookDto AddBook(BookDto bookDto)
+        {
+            var book = _mapper.Map<Book>(bookDto);
+            if (!Validator.TryValidateObject(book, new ValidationContext(book), new List<ValidationResult>(), true))
+                return null;
+
+            book = _bookRepository.AddBook(book);
+            return _mapper.Map<BookDto>(book);
+
         }
     }
 }

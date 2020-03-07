@@ -1,4 +1,5 @@
 ﻿using System;
+using IntroLibrary.Core.DTOs;
 using IntroLibrary.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -28,9 +29,15 @@ namespace IntroLibrary.Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post()
+        public IActionResult Post([FromBody] BookDto book)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = _service.AddBook(book);
+            return result == null ? (IActionResult) BadRequest() : Ok(result);
         }
 
         [HttpPut]
