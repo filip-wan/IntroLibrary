@@ -10,13 +10,15 @@ namespace IntroLibrary.Core.Services
 {
     public interface IBookService
     {
-        
+        IEnumerable<BookDto> GetAllBooks();
+        BookDto GetBook(int id);
+        BookDto GetBook(string search);
     }
 
     public class BookService : IBookService
     {
         private readonly IBookRepository _bookRepository;
-        private Mapper _mapper;
+        private readonly Mapper _mapper;
 
         public BookService(IBookRepository bookRepository)
         {
@@ -26,17 +28,17 @@ namespace IntroLibrary.Core.Services
             _mapper = new Mapper(configuration);
         }
 
-        IEnumerable<BookDto> GetAllBooks()
+        public IEnumerable<BookDto> GetAllBooks()
         {
             return _mapper.Map<IEnumerable<BookDto>>(_bookRepository.GetBooks());
         }
 
-        BookDto GetBook(int id)
+        public BookDto GetBook(int id)
         {
             return _mapper.Map<BookDto>(_bookRepository.GetBook(id));
         }
 
-        BookDto GetBook(string search)
+        public BookDto GetBook(string search)
         {
             var author = _bookRepository.GetBookByAuthor(search);
             var title = _bookRepository.GetBookByTitle(search);
