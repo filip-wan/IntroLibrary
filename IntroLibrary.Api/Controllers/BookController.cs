@@ -2,43 +2,50 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IntroLibrary.Core.Repositories;
+using IntroLibrary.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace IntroLibrary.Api.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class BookController : ControllerBase
     {
+        private readonly BookService _service;
 
-        private readonly ILogger<BookController> _logger;
-
-        public BookController(ILogger<BookController> logger)
+        public BookController(BookService service)
         {
-            _logger = logger;
+            _service = service;
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public IActionResult Get()
         {
-            throw new NotImplementedException();
+            return Ok(_service.GetAllBooks());
+        }
+
+        [HttpGet("{search}")]
+        public IActionResult GetByString([FromRoute] string search)
+        {
+            return Ok(_service.GetBook(search));
         }
 
         [HttpPost]
-        public IEnumerable<WeatherForecast> Post()
+        public IActionResult Post()
         {
             throw new NotImplementedException();
         }
 
         [HttpPut]
-        public IEnumerable<WeatherForecast> Put()
+        public IActionResult Put()
         {
             throw new NotImplementedException();
         }
 
         [HttpDelete]
-        public IEnumerable<WeatherForecast> Delete()
+        public IActionResult Delete()
         {
             throw new NotImplementedException();
         }
