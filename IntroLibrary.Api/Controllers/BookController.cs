@@ -13,9 +13,9 @@ namespace IntroLibrary.Api.Controllers
     [Route("api/[controller]")]
     public class BookController : ControllerBase
     {
-        private readonly BookService _service;
+        private readonly IBookService _service;
 
-        public BookController(BookService service)
+        public BookController(IBookService service)
         {
             _service = service;
         }

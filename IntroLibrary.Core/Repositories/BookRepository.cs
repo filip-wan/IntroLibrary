@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using IntroLibrary.Core.Models;
@@ -16,31 +17,55 @@ namespace IntroLibrary.Core.Repositories
 
     public class BookRepository : IBookRepository
     {
-        private readonly dbContext _context;
+        private readonly List<Book> _books;
 
-        public BookRepository(dbContext context)
+        public BookRepository()
         {
-            _context = context;
+            _books = new List<Book>();
+            InitializeDatabase();
+        }
+
+        private void InitializeDatabase()
+        {
+            _books.Add(
+                new Book
+                {
+                    ID = 1,
+                    Author = "Jules Verne",
+                    Title = "Twenty Thousand Leagues Under the Sea",
+                    ReleaseDate = new DateTime(1992, 04, 15)
+                });
+            _books.Add(
+                new Book
+                {
+                    ID = 2,
+                    Author = "Jules Verne",
+                    Title = "Journey to the Center of the Earth",
+                    ReleaseDate = new DateTime(1993, 11, 01)
+                }
+            );
+            
         }
 
         public IEnumerable<Book> GetBooks()
         {
-            return new List<Book>(_context.Books);
+            var books = _books;
+            return new List<Book>(books);
         }
 
         public Book GetBook(int id)
         {
-            return _context.Books.FirstOrDefault(b => b.ID == id);
+            return _books.FirstOrDefault(b => b.ID == id);
         }
 
         public IEnumerable<Book> GetBookByTitle(string title)
         {
-            return _context.Books.FindAll(b => b.Title == title);
+            return _books.FindAll(b => b.Title == title);
         }
 
         public IEnumerable<Book> GetBookByAuthor(string author)
         {
-            return _context.Books.FindAll(b => b.Author == author);
+            return _books.FindAll(b => b.Author == author);
         }
     }
 }
