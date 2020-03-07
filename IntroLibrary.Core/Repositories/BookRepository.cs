@@ -8,6 +8,7 @@ namespace IntroLibrary.Core.Repositories
 {
     public interface IBookRepository
     {
+        IEnumerable<Book> GetBooks();
         Book GetBook(int id);
         IEnumerable<Book> GetBookByTitle(string title);
         IEnumerable<Book> GetBookByAuthor(string author);
@@ -20,6 +21,11 @@ namespace IntroLibrary.Core.Repositories
         public BookRepository(dbContext context)
         {
             _context = context;
+        }
+
+        public IEnumerable<Book> GetBooks()
+        {
+            return new List<Book>(_context.Books);
         }
 
         public Book GetBook(int id)
