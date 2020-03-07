@@ -86,7 +86,7 @@ namespace IntroLibrary.Core.Repositories
             foreach (var propertyInfo in newBook.GetType().GetProperties())
             {
                 var propertyValue = propertyInfo.GetValue(newBook, null);
-                if (propertyValue == null || (propertyInfo.PropertyType == typeof(DateTime) && (DateTime)propertyValue == DateTime.MinValue))
+                if (propertyValue == null)
                     continue;
 
                 propertyInfo.SetValue(book, propertyValue);

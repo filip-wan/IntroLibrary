@@ -15,6 +15,6 @@ namespace IntroLibrary.Core.Models
 
         [Required(ErrorMessage = "Release Date is required")]
         [DataType(DataType.Date)]
-        public DateTime ReleaseDate { get; set; }
+        public DateTime? ReleaseDate { get; set; }
     }
 }
