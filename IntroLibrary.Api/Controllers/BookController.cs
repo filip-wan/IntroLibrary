@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using IntroLibrary.Core.DTOs;
 using IntroLibrary.Core.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -25,7 +26,8 @@ namespace IntroLibrary.Api.Controllers
         [HttpGet("{search}")]
         public IActionResult GetByString([FromRoute] string search)
         {
-            return Ok(_service.GetBook(search));
+            var result = _service.GetBook(search);
+            return result == null ? (IActionResult)NotFound() : Ok(_service.GetBook(search));
         }
 
         [HttpPost]
