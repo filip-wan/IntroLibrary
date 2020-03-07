@@ -10,7 +10,7 @@ namespace IntroLibrary.Core.Services
     {
         IEnumerable<BookDto> GetAllBooks();
         BookDto GetBook(int id);
-        BookDto GetBook(string search);
+        IEnumerable<BookDto> GetBook(string search);
     }
 
     public class BookService : IBookService
@@ -36,11 +36,12 @@ namespace IntroLibrary.Core.Services
             return _mapper.Map<BookDto>(_bookRepository.GetBook(id));
         }
 
-        public BookDto GetBook(string search)
+        public IEnumerable<BookDto> GetBook(string search)
         {
-            var author = _bookRepository.GetBookByAuthor(search);
-            var title = _bookRepository.GetBookByTitle(search);
-            return _mapper.Map<BookDto>(author ?? title);
+            var result = new HashSet<Book>();
+            result.UnionWith( _bookRepository.GetBookByAuthor(search));
+            result.UnionWith(_bookRepository.GetBookByTitle(search));
+            return result.Count > 0 ? _mapper.Map<IEnumerable<BookDto>>(result) : null;
         }
     }
 }

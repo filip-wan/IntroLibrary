@@ -58,12 +58,12 @@ namespace IntroLibrary.Core.Repositories
 
         public IEnumerable<Book> GetBookByTitle(string title)
         {
-            return _books.FindAll(b => b.Title == title);
+            return _books.FindAll(b => b.Title.Contains(title));
         }
 
         public IEnumerable<Book> GetBookByAuthor(string author)
         {
-            return _books.FindAll(b => b.Author == author);
+            return _books.FindAll(b => b.Author.Contains(author));
         }
     }
 }
