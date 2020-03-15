@@ -21,18 +21,13 @@ namespace IntroLibrary.Core.Services
     public class BookService : IBookService
     {
         private readonly IBookRepository _bookRepository;
-        private readonly Mapper _mapper;
+        private readonly IMapper _mapper;
 
-        public BookService(IBookRepository bookRepository)
+        public BookService(IBookRepository bookRepository, IMapper mapper)
         {
             _bookRepository = bookRepository;
 
-            var configuration = new MapperConfiguration(cfg => 
-            {
-                cfg.CreateMap<Book, BookDto>();
-                cfg.CreateMap<BookDto, Book>();
-            });
-            _mapper = new Mapper(configuration);
+            _mapper = mapper;
         }
 
         public IEnumerable<BookDto> GetAllBooks()

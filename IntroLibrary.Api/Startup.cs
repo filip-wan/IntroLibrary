@@ -1,3 +1,6 @@
+using AutoMapper;
+using IntroLibrary.Core.DTOs;
+using IntroLibrary.Core.Models;
 using IntroLibrary.Core.Repositories;
 using IntroLibrary.Core.Services;
 using Microsoft.AspNetCore.Builder;
@@ -23,8 +26,15 @@ namespace IntroLibrary.Api
         {
             services.AddControllers();
 
-            services.AddScoped<IBookRepository, BookRepository>();
+            services.AddSingleton<IBookRepository, BookRepository>();
             services.AddScoped<IBookService, BookService>();
+            var mappingConfiguration = new MapperConfiguration(cfg =>
+            {
+                cfg.CreateMap<Book, BookDto>();
+                cfg.CreateMap<BookDto, Book>();
+            });
+            var mapper = mappingConfiguration.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddSwaggerGen(c =>
             {
@@ -51,8 +61,6 @@ namespace IntroLibrary.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
